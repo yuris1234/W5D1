@@ -1,4 +1,4 @@
-class MaxIntSet
+class MaxIntSet # (set range of integers)
 
   attr_reader :store
 
@@ -32,24 +32,30 @@ class MaxIntSet
 
 end
 
-class IntSet 
+class IntSet # (arbitrary range of integers)
+  attr_reader :store
   def initialize(num_buckets = 20)
     @store = Array.new(num_buckets) { Array.new }
-  end
+  end 
 
   def insert(num)
+    self[num] << num 
   end
 
   def remove(num)
+    i = self[num].find_index(num)
+    store.delete_at(i)
   end
 
   def include?(num)
+    self[num].include?(num)
   end
 
   private
 
   def [](num)
     # optional but useful; return the bucket corresponding to `num`
+    store[num % num_buckets]
   end
 
   def num_buckets
@@ -57,7 +63,7 @@ class IntSet
   end
 end
 
-class ResizingIntSet
+class ResizingIntSet # (refactor IntSet to run faster)
   attr_reader :count
 
   def initialize(num_buckets = 20)
@@ -66,6 +72,7 @@ class ResizingIntSet
   end
 
   def insert(num)
+
   end
 
   def remove(num)
@@ -81,6 +88,9 @@ class ResizingIntSet
   end
 
   def resize!
+    if count >= num_buckets
+      @store = Array.new(num_buckets+1) {Array.new}
+      
   end
 
   def [](num)
